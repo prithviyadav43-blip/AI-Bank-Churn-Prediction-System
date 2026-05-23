@@ -22,7 +22,7 @@ model_path = os.path.join(
 )
 
 # Load Data
-dataframe = pd.read_csv("European_Bank.csv")
+    dataframe = pd.read_csv("C:\Users\PRITHVI\OneDrive\Banking Ai Dashboard\dataset\European_Bank.csv")
 # Load Model
 model = joblib.load("models/churn_model.pkl")
 
