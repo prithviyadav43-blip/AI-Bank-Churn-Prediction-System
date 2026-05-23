@@ -2,12 +2,27 @@ from flask import Flask, render_template, request
 import pandas as pd
 import numpy as np
 import joblib
-
+import os
 app = Flask(__name__)
 
-# Load Dataset
-dataframe = pd.read_csv("dataset/European_bank.csv")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+# DATASET PATH
+dataset = os.path.join(
+    BASE_DIR,
+    "dataset",
+    "European_Bank.csv"
+)
+
+# MODEL PATH
+model_path = os.path.join(
+    BASE_DIR,
+    "models",
+    "churn_model.pkl"
+)
+
+# Load Data
+dataframe = pd.read_csv("European_Bank.csv")
 # Load Model
 model = joblib.load("models/churn_model.pkl")
 
@@ -261,4 +276,4 @@ def search():
     )
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0",port=10000)
