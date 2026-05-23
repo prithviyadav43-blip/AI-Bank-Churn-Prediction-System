@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Automatic Prediction</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+<div class="top-buttons">
+
+<button onclick="goBack()">
+⬅ Back
+</button>
+
+<button onclick="refreshPage()">
+🔄 Refresh
+</button>
+
+</div>
+
+<div class="main">
+
+<h1>Automatic Customer Search</h1>
+
+<form action="/search" method="POST">
+
+<input type="number"
+name="customerid"
+placeholder="Enter Customer ID">
+
+<button type="submit">
+Search
+</button>
+
+</form>
+
+<h2>{{ result }}</h2>
+
+<p>{{ details }}</p>
+
+    <div class="chart-box">
+
+<h2>Customer Profile</h2>
+
+<p>{{ details }}</p>
+
+<h3>{{ result }}</h3>
+
+</div>
+
+</div>
+
+<script>
+
+function goBack(){
+
+window.history.back();
+
+}
+
+function refreshPage(){
+
+location.reload();
+
+}
+
+</script>
+
+</body>
+
+</html>

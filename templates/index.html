@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<title>AI Banking Dashboard</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<div class="top-buttons">
+
+<button onclick="goBack()">
+⬅ Back
+</button>
+
+<button onclick="refreshPage()">
+🔄 Refresh
+</button>
+
+</div>
+<div class="sidebar">
+
+<h2>AI Banking</h2>
+
+<a href="/">
+<i class="fa-solid fa-chart-line"></i>
+Dashboard
+</a>
+
+<a href="/manual">
+<i class="fa-solid fa-robot"></i>
+Manual Prediction
+</a>
+
+<a href="/auto">
+<i class="fa-solid fa-magnifying-glass"></i>
+Automatic Prediction
+</a>
+
+<a href="/accuracy">
+<i class="fa-solid fa-brain"></i>
+Model Accuracy
+</a>
+
+</div>
+
+<div class="main">
+
+<div class="hero">
+
+<h1>AI Customer Churn Intelligence</h1>
+
+<p>
+Advanced AI analytics for banking churn prediction.
+</p>
+
+</div>
+
+<div class="stats">
+
+<div class="card">
+<h2>{{ total_customers }}</h2>
+<p>Customers</p>
+</div>
+
+<div class="card">
+<h2>{{ churn_rate }}%</h2>
+<p>Churn Rate</p>
+</div>
+
+<div class="card">
+<h2>{{ avg_credit }}</h2>
+<p>AI Accuracy</p>
+</div>
+
+    <div class="card">
+<h2>{{ avg_balance }}</h2>
+<p>Average Balance</p>
+</div>
+
+</div>
+
+<div class="charts-grid">
+
+<div class="chart-box">
+
+<h2>Geography Wise Churn</h2>
+
+<canvas id="geoChart"></canvas>
+
+</div>
+
+<div class="chart-box">
+
+<h2>Credit Card Wise Churn</h2>
+
+<canvas id="cardChart"></canvas>
+
+</div>
+
+<div class="chart-box">
+
+<h2>Active Member Churn</h2>
+
+<canvas id="activeChart"></canvas>
+
+</div>
+<div class="chart-box">
+
+<h2>Gender Wise Churn</h2>
+
+<canvas id="genderChart"></canvas>
+
+</div>
+
+<div class="chart-box">
+
+<h2>Age Group Analysis</h2>
+
+<canvas id="ageChart"></canvas>
+
+</div>
+
+
+</div>
+
+<div class="table-box">
+
+<h2>Customer Data</h2>
+
+<input type="text"
+id="searchInput"
+placeholder="Search Customer..."
+onkeyup="searchTable()">
+
+    <div class="stats">
+
+<div class="card">
+
+<h2>{{ high_value }}</h2>
+
+<p>High Value Customers</p>
+
+</div>
+
+<div class="card">
+
+<h2>{{ medium_value }}</h2>
+
+<p>Medium Value Customers</p>
+
+</div>
+
+<div class="card">
+
+<h2>{{ low_value }}</h2>
+
+<p>Low Value Customers</p>
+
+</div>
+
+</div>
+
+<table>
+
+<tr>
+
+<th>ID</th>
+<th>Name</th>
+<th>Country</th>
+<th>Credit Score</th>
+    <th>Risk</th>
+
+</tr>
+
+{% for customer in customers %}
+
+<tr>
+
+<td>{{ customer.CustomerId }}</td>
+
+    <td>
+
+{% if customer.CreditScore < 500 %}
+
+🔴 High Risk
+
+{% elif customer.CreditScore < 700 %}
+
+🟡 Medium Risk
+
+{% else %}
+
+🟢 Safe
+
+{% endif %}
+
+</td>
+<td>{{ customer.Surname }}</td>
+<td>{{ customer.Geography }}</td>
+<td>{{ customer.CreditScore }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+    <div class="chart-box">
+
+<h2>AI Recommendation Engine</h2>
+
+<ul>
+
+<li>
+Inactive members have higher churn probability.
+</li>
+
+<li>
+Customers with low credit score are risky.
+</li>
+
+<li>
+High balance inactive customers require retention offers.
+</li>
+
+<li>
+France region has stable customers.
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+<script>
+
+const geo = document.getElementById('geoChart');
+
+new Chart(geo, {
+
+type:'bar',
+
+data:{
+
+labels: {{ geography_labels | tojson }},
+
+datasets:[{
+
+label:'Churn Customers',
+
+data: {{ geography_churn | tojson }},
+
+backgroundColor:[
+'#06B6D4',
+'#8B5CF6',
+'#EF4444'
+]
+
+}]
+
+}
+
+});
+
+
+const card = document.getElementById('cardChart');
+
+new Chart(card, {
+
+type:'doughnut',
+
+data:{
+
+labels:['No Credit Card','Has Credit Card'],
+
+datasets:[{
+
+data: {{ card_churn | tojson }},
+
+backgroundColor:[
+'#F59E0B',
+'#10B981'
+]
+
+}]
+
+}
+
+});
+
+
+const active = document.getElementById('activeChart');
+
+new Chart(active, {
+
+type:'pie',
+
+data:{
+
+labels:['Non Active','Active Members'],
+
+datasets:[{
+
+data: {{ active_churn | tojson }},
+
+backgroundColor:[
+'#EF4444',
+'#06B6D4'
+]
+
+}]
+
+}
+
+});
+
+function searchTable() {
+
+let input = document.getElementById("searchInput");
+
+let filter = input.value.toUpperCase();
+
+let table = document.querySelector("table");
+
+let tr = table.getElementsByTagName("tr");
+
+for (let i = 1; i < tr.length; i++) {
+
+let td = tr[i].getElementsByTagName("td")[1];
+
+if (td) {
+
+let txtValue = td.textContent || td.innerText;
+
+if (txtValue.toUpperCase().indexOf(filter) > -1) {
+
+tr[i].style.display = "";
+
+} else {
+
+tr[i].style.display = "none";
+
+}
+
+}
+
+}
+
+}
+
+const gender = document.getElementById('genderChart');
+
+new Chart(gender, {
+
+type:'pie',
+
+data:{
+
+labels:['Female','Male'],
+
+datasets:[{
+
+data: {{ gender_churn | tojson }},
+
+backgroundColor:[
+'#EC4899',
+'#3B82F6'
+]
+
+}]
+
+}
+
+});
+
+const age = document.getElementById('ageChart');
+
+new Chart(age, {
+
+type:'bar',
+
+data:{
+
+labels:['Young','Middle Age','Senior'],
+
+datasets:[{
+
+label:'Customers',
+
+data:[
+{{ young }},
+{{ middle }},
+{{ senior }}
+],
+
+backgroundColor:[
+'#06B6D4',
+'#8B5CF6',
+'#EF4444'
+]
+
+}]
+
+}
+
+});
+
+function goBack(){
+
+window.history.back();
+
+}
+
+function refreshPage(){
+
+location.reload();
+
+}
+
+</script>
+
+</body>
+
+</html>

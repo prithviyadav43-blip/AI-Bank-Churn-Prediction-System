@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Model Accuracy</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="top-buttons">
+
+<button onclick="goBack()">
+⬅ Back
+</button>
+
+<button onclick="refreshPage()">
+🔄 Refresh
+</button>
+
+</div>
+
+<div class="main">
+
+<h1>AI Model Performance</h1>
+
+<div class="stats">
+
+<div class="card">
+
+<h2>95%</h2>
+
+<p>Accuracy</p>
+
+</div>
+
+<div class="card">
+
+<h2>93%</h2>
+
+<p>Precision</p>
+
+</div>
+
+<div class="card">
+
+<h2>91%</h2>
+
+<p>Recall</p>
+
+</div>
+
+<div class="card">
+
+<h2>92%</h2>
+
+<p>F1 Score</p>
+
+</div>
+
+</div>
+
+<div class="chart-box">
+
+<h2>Confusion Matrix</h2>
+
+<img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*Z54JgbS4DUwWSknhDCvNTQ.png"
+width="100%">
+
+</div>
+
+</div>
+
+<script>
+
+function goBack(){
+
+window.history.back();
+
+}
+
+function refreshPage(){
+
+location.reload();
+
+}
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Manual Prediction</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="top-buttons">
+
+<button onclick="goBack()">
+⬅ Back
+</button>
+
+<button onclick="refreshPage()">
+🔄 Refresh
+</button>
+
+</div>
+<div class="main">
+
+<h1>Manual Prediction</h1>
+
+<form action="/predict" method="POST">
+
+<input type="number"
+name="creditscore"
+placeholder="Credit Score">
+
+<input type="number"
+name="age"
+placeholder="Age">
+
+<input type="number"
+name="balance"
+placeholder="Balance">
+
+<input type="number"
+name="salary"
+placeholder="Salary">
+
+    <select name="creditcard">
+
+<option value="1">
+Has Credit Card
+</option>
+
+<option value="0">
+No Credit Card
+</option>
+
+</select>
+
+<select name="activemember">
+
+<option value="1">
+Active Member
+</option>
+
+<option value="0">
+Non Active Member
+</option>
+
+</select>
+
+<button type="submit">
+Predict
+</button>
+
+</form>
+
+<h2>{{ prediction }}</h2>
+    <div class="prediction-message">
+
+<p>{{ message }}</p>
+
+</div>
+
+    <div class="gauge-box">
+
+<h2>Churn Probability</h2>
+
+<canvas id="gaugeChart"></canvas>
+
+<h1>{{ percentage }}%</h1>
+
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const gauge = document.getElementById('gaugeChart');
+
+new Chart(gauge, {
+
+type:'doughnut',
+
+data:{
+
+labels:['Churn','Safe'],
+
+datasets:[{
+
+data:[{{ percentage }}, 100 - {{ percentage }}],
+
+backgroundColor:[
+'#EF4444',
+'#10B981'
+],
+
+borderWidth:0
+
+}]
+
+},
+
+options:{
+
+rotation:-90,
+
+circumference:180,
+
+cutout:'70%'
+
+}
+
+});
+
+</script>
+<script>
+
+function goBack(){
+
+window.history.back();
+
+}
+
+function refreshPage(){
+
+location.reload();
+
+}
+
+</script>
+
+</body>
+
+</html>
